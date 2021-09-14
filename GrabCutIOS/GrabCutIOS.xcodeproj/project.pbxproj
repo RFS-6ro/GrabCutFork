@@ -13,7 +13,6 @@
 		905F60F31B919E8C00094E52 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F11B919E8C00094E52 /* Main.storyboard */; };
 		905F60F51B919E8C00094E52 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F41B919E8C00094E52 /* Images.xcassets */; };
 		905F60F81B919E8C00094E52 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F61B919E8C00094E52 /* LaunchScreen.xib */; };
-		905F61041B919E8C00094E52 /* GrabCutIOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F61031B919E8C00094E52 /* GrabCutIOSTests.m */; };
 		905F610E1B91A2C800094E52 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 905F610D1B91A2C800094E52 /* opencv2.framework */; };
 		905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F61121B91A43B00094E52 /* GrabCutManager.mm */; };
 		905F61181B91A43B00094E52 /* TouchDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F61151B91A43B00094E52 /* TouchDrawView.m */; };
@@ -43,8 +42,6 @@
 		905F60F41B919E8C00094E52 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		905F60F71B919E8C00094E52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		905F60FD1B919E8C00094E52 /* GrabCutIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GrabCutIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		905F61021B919E8C00094E52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		905F61031B919E8C00094E52 /* GrabCutIOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GrabCutIOSTests.m; sourceTree = "<group>"; };
 		905F610D1B91A2C800094E52 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		905F61101B91A3B700094E52 /* GrabCutIOSPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GrabCutIOSPrefix.pch; sourceTree = "<group>"; };
 		905F61111B91A43B00094E52 /* GrabCutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrabCutManager.h; sourceTree = "<group>"; };
@@ -82,7 +79,6 @@
 				905F61101B91A3B700094E52 /* GrabCutIOSPrefix.pch */,
 				905F610D1B91A2C800094E52 /* opencv2.framework */,
 				905F60E61B919E8C00094E52 /* GrabCutIOS */,
-				905F61001B919E8C00094E52 /* GrabCutIOSTests */,
 				905F60E51B919E8C00094E52 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -121,23 +117,6 @@
 			children = (
 				905F60E81B919E8C00094E52 /* Info.plist */,
 				905F60E91B919E8C00094E52 /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		905F61001B919E8C00094E52 /* GrabCutIOSTests */ = {
-			isa = PBXGroup;
-			children = (
-				905F61031B919E8C00094E52 /* GrabCutIOSTests.m */,
-				905F61011B919E8C00094E52 /* Supporting Files */,
-			);
-			path = GrabCutIOSTests;
-			sourceTree = "<group>";
-		};
-		905F61011B919E8C00094E52 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				905F61021B919E8C00094E52 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -203,6 +182,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -255,7 +235,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				905F61041B919E8C00094E52 /* GrabCutIOSTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

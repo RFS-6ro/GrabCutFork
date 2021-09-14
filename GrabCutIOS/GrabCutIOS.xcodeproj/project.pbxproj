@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		667D779E26F09F18004E636E /* OpenCV+ImageCropper  in Resources */ = {isa = PBXBuildFile; fileRef = 667D779D26F09F18004E636E /* OpenCV+ImageCropper  */; };
+		667D77A226F0B4C6004E636E /* GrabCutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F61121B91A43B00094E52 /* GrabCutManager.mm */; };
 		905F60EA1B919E8C00094E52 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60E91B919E8C00094E52 /* main.m */; };
 		905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60EC1B919E8C00094E52 /* AppDelegate.m */; };
 		905F60F01B919E8C00094E52 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F60EF1B919E8C00094E52 /* ViewController.mm */; };
@@ -14,7 +16,6 @@
 		905F60F51B919E8C00094E52 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F41B919E8C00094E52 /* Images.xcassets */; };
 		905F60F81B919E8C00094E52 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F61B919E8C00094E52 /* LaunchScreen.xib */; };
 		905F610E1B91A2C800094E52 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 905F610D1B91A2C800094E52 /* opencv2.framework */; };
-		905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F61121B91A43B00094E52 /* GrabCutManager.mm */; };
 		905F61181B91A43B00094E52 /* TouchDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F61151B91A43B00094E52 /* TouchDrawView.m */; };
 		90DE070C1B92A4FA009311B8 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */; };
 		90DE07101B92C371009311B8 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 90DE070F1B92C371009311B8 /* test.jpg */; };
@@ -31,6 +32,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		667D779D26F09F18004E636E /* OpenCV+ImageCropper  */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "OpenCV+ImageCropper "; sourceTree = "<group>"; };
+		667D77A126F0A840004E636E /* ImageCropper-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageCropper-Bridging-Header.h"; sourceTree = "<group>"; };
 		905F60E41B919E8C00094E52 /* GrabCutIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GrabCutIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		905F60E81B919E8C00094E52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		905F60E91B919E8C00094E52 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -45,7 +48,7 @@
 		905F610D1B91A2C800094E52 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		905F61101B91A3B700094E52 /* GrabCutIOSPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GrabCutIOSPrefix.pch; sourceTree = "<group>"; };
 		905F61111B91A43B00094E52 /* GrabCutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrabCutManager.h; sourceTree = "<group>"; };
-		905F61121B91A43B00094E52 /* GrabCutManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GrabCutManager.mm; sourceTree = "<group>"; };
+		905F61121B91A43B00094E52 /* GrabCutManager.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = GrabCutManager.mm; path = GrabCutIOS/GrabCutManager.mm; sourceTree = SOURCE_ROOT; };
 		905F61141B91A43B00094E52 /* TouchDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchDrawView.h; sourceTree = "<group>"; };
 		905F61151B91A43B00094E52 /* TouchDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchDrawView.m; sourceTree = "<group>"; };
 		90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -75,6 +78,8 @@
 		905F60DB1B919E8C00094E52 = {
 			isa = PBXGroup;
 			children = (
+				667D77A126F0A840004E636E /* ImageCropper-Bridging-Header.h */,
+				667D779D26F09F18004E636E /* OpenCV+ImageCropper  */,
 				90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */,
 				905F61101B91A3B700094E52 /* GrabCutIOSPrefix.pch */,
 				905F610D1B91A2C800094E52 /* opencv2.framework */,
@@ -206,6 +211,7 @@
 				905F60F81B919E8C00094E52 /* LaunchScreen.xib in Resources */,
 				905F60F51B919E8C00094E52 /* Images.xcassets in Resources */,
 				90DE07101B92C371009311B8 /* test.jpg in Resources */,
+				667D779E26F09F18004E636E /* OpenCV+ImageCropper  in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,7 +229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */,
+				667D77A226F0B4C6004E636E /* GrabCutManager.mm in Sources */,
 				905F60F01B919E8C00094E52 /* ViewController.mm in Sources */,
 				905F61181B91A43B00094E52 /* TouchDrawView.m in Sources */,
 				905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */,
@@ -360,6 +366,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GrabCutIOSPrefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/OpenCV+ImageCropper";
 				INFOPLIST_FILE = GrabCutIOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -377,6 +384,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GrabCutIOSPrefix.pch";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/OpenCV+ImageCropper";
 				INFOPLIST_FILE = GrabCutIOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

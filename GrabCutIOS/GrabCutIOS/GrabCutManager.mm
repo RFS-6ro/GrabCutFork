@@ -8,9 +8,14 @@
 //
 
 #import "GrabCutManager.h"
+#import "CvFilters.h"
 #import <opencv2/opencv.hpp>
 
+using namespace cv;
+
 @implementation GrabCutManager
+
+Mat mask, bgModel,fgModel;
 
 - (cv::Mat)cvMatFromUIImage:(UIImage *)image
 {

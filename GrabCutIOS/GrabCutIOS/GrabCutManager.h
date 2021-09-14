@@ -18,10 +18,8 @@ using namespace cv;
 
 
 @interface GrabCutManager : NSObject{
-    cv::Mat mask; // segmentation (4 possible values)
-    cv::Mat bgModel,fgModel; // the models (internally used)
+    CGRect rectangle;
 }
--(UIImage*) doGrabCut:(UIImage*)sourceImage foregroundBound:(CGRect) rect iterationCount:(int)iterCount;
--(UIImage*) doGrabCutWithMask:(UIImage*)sourceImage maskImage:(UIImage*)maskImage iterationCount:(int) iterCount;
+-(UIImage*) grabCut:(UIImage*)img Rectangle:(CGRect)rect Mask:(UIImage*)mask RelativeTo:(UIImage*)relativeTo;
 -(void) resetManager;
 @end

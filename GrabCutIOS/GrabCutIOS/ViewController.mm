@@ -239,8 +239,9 @@ const static int MAX_IMAGE_LENGTH = 450;
     __weak typeof(self)weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,
                                              (unsigned long)NULL), ^(void) {
-        UIImage* resultImage= [weakSelf.grabcut doGrabCut:weakSelf.resizedImage foregroundBound:weakSelf.grabRect iterationCount:5];
-        resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
+        
+        UIImage* resultImage= [weakSelf.grabcut grabCut:weakSelf.resizedImage Rectangle:weakSelf.grabRect Mask:nullptr RelativeTo:weakSelf.originalImage];
+//        resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [weakSelf.resultImageView setImage:resultImage];
@@ -258,8 +259,14 @@ const static int MAX_IMAGE_LENGTH = 450;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,
                                              (unsigned long)NULL), ^(void) {
-        UIImage* resultImage= [weakSelf.grabcut doGrabCutWithMask:weakSelf.resizedImage maskImage:[weakSelf resizeImage:image size:weakSelf.resizedImage.size] iterationCount:5];
-        resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
+        
+        
+        UIImage* resultImage= [weakSelf.grabcut grabCut:weakSelf.resizedImage
+                                              Rectangle:weakSelf.grabRect
+                                                   Mask:image
+                                             RelativeTo:weakSelf.originalImage];
+        
+        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [weakSelf.resultImageView setImage:resultImage];
             [weakSelf.imageView setAlpha:0.2];
@@ -269,7 +276,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"began");
+//    NSLog(@"began");
     UITouch *touch = [touches anyObject];
     self.startPoint = [touch locationInView:self.imageView];
     
@@ -281,7 +288,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"moved");
+//    NSLog(@"moved");
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self.imageView];
     
@@ -294,7 +301,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"ended");
+//    NSLog(@"ended");
     UITouch *touch = [touches anyObject];
     self.endPoint = [touch locationInView:self.imageView];
     

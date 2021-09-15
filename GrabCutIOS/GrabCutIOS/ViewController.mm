@@ -21,7 +21,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic) CGPoint endPoint;
 @property (weak, nonatomic) IBOutlet TouchDrawView *touchDrawView;
-@property (nonatomic, strong) GrabCutManager* grabcut;
+@property (nonatomic, strong) GrabCutManager* grabCutManager;
 @property (weak, nonatomic) IBOutlet UILabel *stateLabel;
 @property (weak, nonatomic) IBOutlet UIButton *rectButton;
 @property (weak, nonatomic) IBOutlet UIButton *plusButton;
@@ -43,7 +43,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    _grabcut = [[GrabCutManager alloc] init];
+    _grabCutManager = [[GrabCutManager alloc] init];
     
     _originalImage = [UIImage imageNamed:@"test.jpg"];
     _resizedImage = [self getProperResizedImage:_originalImage];
@@ -239,14 +239,25 @@ const static int MAX_IMAGE_LENGTH = 450;
     __weak typeof(self)weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,
                                              (unsigned long)NULL), ^(void) {
+//        UIImage* resultImage =
+//        [weakSelf.grabCutManager grabCut:
+//                weakSelf.resizedImage
+//                Rectangle:weakSelf.grabRect
+//                Mask:nullptr
+//                RelativeTo: weakSelf.originalImage
+//         ];
+//        -(UIImage*) doGrabCut:(UIImage*)sourceImage foregroundBound:(CGRect) rect iterationCount:(int)iterCount;
+//        UIImage* resultImage= [weakSelf.grabCutManager grabCut:weakSelf.resizedImage foregroundBound:weakSelf.grabRect iterationCount:5];
         
-        UIImage* resultImage= [weakSelf.grabcut grabCut:weakSelf.resizedImage Rectangle:weakSelf.grabRect Mask:nullptr RelativeTo:weakSelf.originalImage];
-//        resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
+        UIImage* resultImage = [weakSelf.grabCutManager doGrabCut:weakSelf.resizedImage foregroundBound:weakSelf.grabRect iterationCount:11];
+        resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
         
+//        NSData *data = [NSData dataWithBytes:result length:weakSelf.resizedImage.size.width * weakSelf.resizedImage.size.height * 4];
+//        UIImageWriteToSavedPhotosAlbum(resultImage, nil, nil, nil);
+//        UIImage* resultImage = [[UIImage alloc]initWithData:data];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [weakSelf.resultImageView setImage:resultImage];
-            [weakSelf.imageView setAlpha:0.2];
-            
+            [weakSelf.imageView setAlpha:0];
             [weakSelf hideLoadingIndicatorView];
         });
     });
@@ -259,24 +270,38 @@ const static int MAX_IMAGE_LENGTH = 450;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,
                                              (unsigned long)NULL), ^(void) {
+//        UIImage* resultImage =
+//        [weakSelf.grabCutManager grabCut:
+//                weakSelf.resizedImage
+//                Rectangle:weakSelf.grabRect
+//                Mask:
+//                [
+//                        weakSelf resizeImage:
+//                                image
+//                                size:weakSelf.resizedImage.size
+//                ]
+//                RelativeTo: weakSelf.originalImage
+//         ];
+        auto masked = [weakSelf resizeImage:image size:weakSelf.resizedImage.size];
         
-        
-        UIImage* resultImage= [weakSelf.grabcut grabCut:weakSelf.resizedImage
-                                              Rectangle:weakSelf.grabRect
-                                                   Mask:image
-                                             RelativeTo:weakSelf.originalImage];
-        
-        
+        UIImage* resultImage = [weakSelf.grabCutManager doGrabCutWithMask:weakSelf.resizedImage maskImage:masked iterationCount:11];
+        resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
+//        resultImage = [weakSelf.grabCutManager smoothWhiteBounds:resultImage];
+//        UIImageWriteToSavedPhotosAlbum(resultImage, nil, nil, nil);
+//        NSData *data = [NSData dataWithBytes:result length:weakSelf.resizedImage.size.width * weakSelf.resizedImage.size.height * 4];
+//        UIImage* resultImage = [[UIImage alloc]initWithData:data];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [weakSelf.resultImageView setImage:resultImage];
-            [weakSelf.imageView setAlpha:0.2];
+            [weakSelf.imageView setAlpha:0];
             [weakSelf hideLoadingIndicatorView];
         });
     });
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+#if DEBUG
 //    NSLog(@"began");
+#endif
     UITouch *touch = [touches anyObject];
     self.startPoint = [touch locationInView:self.imageView];
     
@@ -288,7 +313,9 @@ const static int MAX_IMAGE_LENGTH = 450;
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+#if DEBUG
 //    NSLog(@"moved");
+#endif
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self.imageView];
     
@@ -301,7 +328,9 @@ const static int MAX_IMAGE_LENGTH = 450;
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+#if DEBUG
 //    NSLog(@"ended");
+#endif
     UITouch *touch = [touches anyObject];
     self.endPoint = [touch locationInView:self.imageView];
     
@@ -326,7 +355,7 @@ const static int MAX_IMAGE_LENGTH = 450;
     _doGrabcutButton.enabled = NO;
     
     [self.touchDrawView clear];
-    [self.grabcut resetManager];
+    [self.grabCutManager resetManager];
 }
 - (IBAction)tapOnRect:(id)sender {
     _touchState = TouchStateRect;
@@ -348,6 +377,14 @@ const static int MAX_IMAGE_LENGTH = 450;
     _touchState = TouchStateMinus;
     [self updateStateLabel];
     [_touchDrawView setCurrentState:TouchStateMinus];
+}
+
+- (IBAction)OnSliderValueChanged:(UISlider *)sender forEvent:(UIEvent *)event {
+    @try {
+        [self.touchDrawView setBrushSize:(sender.value)];
+    } @catch (NSException *exception) {
+        NSLog(@"exception here : %@ ", exception.reason);
+    }
 }
 
 -(IBAction)tapOnDoGrabcut:(id)sender{
@@ -404,7 +441,7 @@ const static int MAX_IMAGE_LENGTH = 450;
     _resizedImage = [self getProperResizedImage:_originalImage];
     _imageView.image = _originalImage;
     [self initStates];
-    [self.grabcut resetManager];
+    [self.grabCutManager resetManager];
 }
 
 - (BOOL) startCameraControllerFromViewController: (UIViewController*) controller
@@ -453,8 +490,6 @@ const static int MAX_IMAGE_LENGTH = 450;
     // Displays saved pictures and movies, if both are available, from the
     // Camera Roll album.
     self.imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
-//    [UIImagePickerController availableMediaTypesForSourceType:
-//     UIImagePickerControllerSourceTypeSavedPhotosAlbum];
     
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.

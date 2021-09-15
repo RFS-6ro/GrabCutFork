@@ -42,11 +42,11 @@
 
 -(void) initTouchView{
     _plusPath = [UIBezierPath bezierPath];
-    [_plusPath setLineWidth:6.0];
+    [_plusPath setLineWidth:20.0];
     [_plusPath setLineCapStyle:kCGLineCapRound];
     
     _minusPath = [UIBezierPath bezierPath];
-    [_minusPath setLineWidth:6.0];
+    [_minusPath setLineWidth:20.0];
     [_minusPath setLineCapStyle:kCGLineCapRound];
     
     _currentState = TouchStateNone;
@@ -59,6 +59,19 @@
         pts[0] = p;
     }
     
+}
+
+-(void) setBrushSize:(float) value;
+{
+    @try {
+        [_plusPath setLineWidth:value];
+        [_plusPath setLineCapStyle:kCGLineCapRound];
+        [_minusPath setLineWidth:value];
+        [_minusPath setLineCapStyle:kCGLineCapRound];
+    } @catch (NSException *exception) {
+        
+        NSLog(@"exception here : %@ ", exception.reason);
+    }
 }
 
 - (void)touchMoved:(CGPoint) p
@@ -131,7 +144,7 @@
 
 - (UIImage *) maskImageWithPainting
 {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.2);
     [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

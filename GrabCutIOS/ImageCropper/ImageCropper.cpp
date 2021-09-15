@@ -13,6 +13,11 @@ ImageCropper::ImageCropper(cv::Mat sourceData)
     setSourceImage(sourceData);
 }
 
+ImageCropper::ImageCropper(ImageData sourceData)
+{
+    setSourceImage(sourceData);
+}
+
 void ImageCropper::setSourceImage(cv::Mat sourceData)
 {
     pxlHeight = sourceData.rows;
@@ -20,12 +25,18 @@ void ImageCropper::setSourceImage(cv::Mat sourceData)
     srcImg = sourceData.clone();
 }
 
+void ImageCropper::setSourceImage(ImageData sourceData)
+{
+    pxlHeight = sourceData.Height;
+    pxlWidth = sourceData.Width;
+    srcImg = sourceData.toMat();
+}
 
 void ImageCropper::setMask(cv::Mat maskData)
 {
     if (maskData.empty())
     {
-        mask = cv::Mat();
+        mask = cv::Mat();//throw ImageCropperArgumentException("Mask are not valid");
         return;
     }
 
@@ -46,6 +57,32 @@ void ImageCropper::setMask(cv::Mat maskData)
     }
 
     mask = maskData.clone();
+}
+
+void ImageCropper::setMask(ImageData maskData)
+{
+    if (maskData.Bytes == nullptr)
+    {
+        throw ImageCropperArgumentException("Bytes are not valid");
+    }
+
+    if (srcImg.empty())
+    {
+        throw ImageCropperArgumentException("Image is not assigned");
+    }
+
+    if (maskData.Width != pxlWidth ||
+        maskData.Height != pxlHeight)
+    {
+        throw ImageCropperArgumentException("Mask does not fit source image");
+    }
+
+    if (maskData.NumberOfChannels != 1)
+    {
+        throw ImageCropperArgumentException("Mask should contains only one gray channel");
+    }
+
+    mask = maskData.toMat();
 }
 
 void ImageCropper::setMask(int32_t * white,
@@ -122,12 +159,40 @@ void ImageCropper::setRectangle(cv::Rect rect)
     setRectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 }
 
+ImageData ImageCropper::getCroppedImage()
+{
+    if (srcImg.empty())
+    {
+        throw ImageCropperArgumentException("Image is not assigned");
+    }
+
+//    if (rect)
+//    {
+//        throw ImageCropperArgumentException("Rectangle is not assigned");
+//    }
+
+    try
+    {
+        CvFilters::applyGrabCut(&srcImg, rect, &mask);
+        return ImageData(srcImg);
+    }
+    catch (const std::exception&)
+    {
+        throw;
+    }
+}
+
 cv::Mat ImageCropper::getCroppedMat()
 {
     if (srcImg.empty())
     {
         throw ImageCropperArgumentException("Image is not assigned");
     }
+
+//    if (rect)
+//    {
+//        throw ImageCropperArgumentException("Rectangle is not assigned");
+//    }
 
     try
     {

@@ -7,7 +7,7 @@ cv::Mat CvFilters::makeTransparent(cv::Mat img)
     {
         cv::Mat transparentImg(img.rows, img.cols, CV_8UC4);
 
-        cv::cvtColor(img, transparentImg, cv::COLOR_BGR2BGRA);
+        cv::cvtColor(img, transparentImg, cv::COLOR_RGB2RGBA);
 
         uint8_t* transparentImgPtr = (uint8_t*)transparentImg.data;
 
@@ -46,8 +46,8 @@ void CvFilters::applyGrabCut(cv::Mat* img, cv::Rect rect, cv::Mat* mask)
     try
     {
         cv::Mat maskedRect = cv::Mat(img->rows, img->cols, CV_8UC1);
-        cv::Mat bgr(1, 65, CV_64F);
-        cv::Mat fgr(1, 65, CV_64F);
+        cv::Mat bgr;
+        cv::Mat fgr;
 
         grabCut(*img, maskedRect, rect, bgr, fgr, 5, cv::GC_INIT_WITH_RECT);
 
@@ -63,11 +63,11 @@ void CvFilters::applyGrabCut(cv::Mat* img, cv::Rect rect, cv::Mat* mask)
                 {
                     uint8_t maskIntensity = maskPtr[i * mask->cols + j];
 
-                    if (maskIntensity > (uint8_t)200)
+                    if (maskIntensity > (uint8_t)254)
                     {
                         maskRectPtr[i * mask->cols + j + 0] = (uint8_t)1;
                     }
-                    else if (maskIntensity < (uint8_t)50)
+                    else if (maskIntensity < (uint8_t)1)
                     {
                         maskRectPtr[i * mask->cols + j + 0] = (uint8_t)0;
                     }
@@ -109,13 +109,24 @@ void CvFilters::applyGrabCut(cv::Mat* img, cv::Rect rect, cv::Mat* mask)
     }
 }
 
-void CvFilters::cropContours(cv::Mat * img)
+void  CvFilters::cropContours(cv::Mat * img)
 {
     try
     {
-        cv::threshold(*img, *img, 1, 255, 0);
-        cv::medianBlur(*img, *img, 5);
-        cv::threshold(*img, *img, 225, 255, 0);
+//        cv::pyrUp(*img, *img);
+//
+//        for (int i = 0; i < 15; i++)
+//        {
+//            cv::medianBlur(*img, *img, 7);
+//        }
+//
+//        cv::pyrDown(*img, *img);
+//        cv::threshold(*img, *img, 200, 255, cv::THRESH_BINARY);
+//        cv::dilate(*img, *img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3)));
+//        cv::GaussianBlur(*img, *img, cv::Size(5,5), 0);
+//        cv::threshold(*img, *img, 235, 255, 0);//cv::GC_FGD
+        //cv::medianBlur(*img, *img, 7);
+        //cv::bilateralFilter(*img, *img,9,75,75);
     }
     catch (const std::exception&)
     {

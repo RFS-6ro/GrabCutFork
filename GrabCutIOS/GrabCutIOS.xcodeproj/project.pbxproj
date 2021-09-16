@@ -11,6 +11,7 @@
 		662C4D9926034F7A008A4897 /* CvFilters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662C4D9426034F7A008A4897 /* CvFilters.cpp */; };
 		662C4D9A26034F7A008A4897 /* ImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662C4D9526034F7A008A4897 /* ImageData.cpp */; };
 		6643053D260893AD0062EC06 /* NSData+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6643053C260893AD0062EC06 /* NSData+OpenCV.mm */; };
+		666DD2C726F3759300CCB919 /* GrabCutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 666DD2C626F3759300CCB919 /* GrabCutManager.mm */; };
 		905F60EA1B919E8C00094E52 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60E91B919E8C00094E52 /* main.m */; };
 		905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60EC1B919E8C00094E52 /* AppDelegate.m */; };
 		905F60F01B919E8C00094E52 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F60EF1B919E8C00094E52 /* ViewController.mm */; };
@@ -19,7 +20,6 @@
 		905F60F81B919E8C00094E52 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F61B919E8C00094E52 /* LaunchScreen.xib */; };
 		905F61041B919E8C00094E52 /* GrabCutIOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F61031B919E8C00094E52 /* GrabCutIOSTests.m */; };
 		905F610E1B91A2C800094E52 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 905F610D1B91A2C800094E52 /* opencv2.framework */; };
-		905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F61121B91A43B00094E52 /* GrabCutManager.mm */; };
 		905F61181B91A43B00094E52 /* TouchDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F61151B91A43B00094E52 /* TouchDrawView.m */; };
 		90DE070C1B92A4FA009311B8 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */; };
 		90DE07101B92C371009311B8 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 90DE070F1B92C371009311B8 /* test.jpg */; };
@@ -46,6 +46,8 @@
 		662C4D9726034F7A008A4897 /* ImageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageData.h; sourceTree = "<group>"; };
 		6643053B260893AD0062EC06 /* NSData+OpenCV.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+OpenCV.h"; sourceTree = "<group>"; };
 		6643053C260893AD0062EC06 /* NSData+OpenCV.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+OpenCV.mm"; sourceTree = "<group>"; };
+		666DD2C526F3759300CCB919 /* GrabCutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrabCutManager.h; sourceTree = "<group>"; };
+		666DD2C626F3759300CCB919 /* GrabCutManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GrabCutManager.mm; sourceTree = "<group>"; };
 		905F60E41B919E8C00094E52 /* GrabCutIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GrabCutIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		905F60E81B919E8C00094E52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		905F60E91B919E8C00094E52 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -61,8 +63,6 @@
 		905F61031B919E8C00094E52 /* GrabCutIOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GrabCutIOSTests.m; sourceTree = "<group>"; };
 		905F610D1B91A2C800094E52 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		905F61101B91A3B700094E52 /* GrabCutIOSPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GrabCutIOSPrefix.pch; sourceTree = "<group>"; };
-		905F61111B91A43B00094E52 /* GrabCutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrabCutManager.h; sourceTree = "<group>"; };
-		905F61121B91A43B00094E52 /* GrabCutManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GrabCutManager.mm; sourceTree = "<group>"; };
 		905F61141B91A43B00094E52 /* TouchDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchDrawView.h; sourceTree = "<group>"; };
 		905F61151B91A43B00094E52 /* TouchDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchDrawView.m; sourceTree = "<group>"; };
 		90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -140,8 +140,8 @@
 			isa = PBXGroup;
 			children = (
 				90DE070F1B92C371009311B8 /* test.jpg */,
-				905F61111B91A43B00094E52 /* GrabCutManager.h */,
-				905F61121B91A43B00094E52 /* GrabCutManager.mm */,
+				666DD2C526F3759300CCB919 /* GrabCutManager.h */,
+				666DD2C626F3759300CCB919 /* GrabCutManager.mm */,
 				905F61141B91A43B00094E52 /* TouchDrawView.h */,
 				905F61151B91A43B00094E52 /* TouchDrawView.m */,
 				905F60EB1B919E8C00094E52 /* AppDelegate.h */,
@@ -285,9 +285,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */,
 				662C4D9926034F7A008A4897 /* CvFilters.cpp in Sources */,
 				662C4D9826034F7A008A4897 /* ImageCropper.cpp in Sources */,
+				666DD2C726F3759300CCB919 /* GrabCutManager.mm in Sources */,
 				662C4D9A26034F7A008A4897 /* ImageData.cpp in Sources */,
 				6643053D260893AD0062EC06 /* NSData+OpenCV.mm in Sources */,
 				905F60F01B919E8C00094E52 /* ViewController.mm in Sources */,

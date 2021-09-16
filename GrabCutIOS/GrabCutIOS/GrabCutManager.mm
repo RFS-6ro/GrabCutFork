@@ -1,5 +1,6 @@
 #import "GrabCutManager.h"
 #import <opencv2/opencv.hpp>
+#import <opencv2/imgcodecs/ios.h>
 
 using namespace cv;
 
@@ -7,26 +8,75 @@ using namespace cv;
 
 Mat mask, bgModel,fgModel;
 
-- (Mat)cvMatFromUIImage:(UIImage *)image
+//- (Mat)cvMatFromUIImage:(UIImage *)image
+//{
+//    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
+//    CGFloat cols = image.size.width;
+//    CGFloat rows = image.size.height;
+//
+//    Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels (color channels + alpha)
+//
+//    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to  data
+//                                                    cols,                       // Width of bitmap
+//                                                    rows,                       // Height of bitmap
+//                                                    8,                          // Bits per component
+//                                                    cvMat.step[0],              // Bytes per row
+//                                                    colorSpace,                 // Colorspace
+//                                                    kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault); // Bitmap info flags
+//
+//    CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
+//    CGContextRelease(contextRef);
+//
+//    return cvMat;
+//}
++ (cv::Mat)cvMatFromUIImage:(UIImage *)image
 {
     CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
-    CGFloat cols = image.size.width;
-    CGFloat rows = image.size.height;
-    
-    Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels (color channels + alpha)
-    
-    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to  data
+    CGFloat cols,rows;
+    if  (image.imageOrientation == UIImageOrientationLeft
+         || image.imageOrientation == UIImageOrientationRight) {
+        cols = image.size.height;
+        rows = image.size.width;
+    }
+    else{
+        cols = image.size.width;
+        rows = image.size.height;
+
+    }
+
+
+    cv::Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels
+
+    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to backing data
                                                     cols,                       // Width of bitmap
                                                     rows,                       // Height of bitmap
                                                     8,                          // Bits per component
                                                     cvMat.step[0],              // Bytes per row
                                                     colorSpace,                 // Colorspace
-                                                    kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault); // Bitmap info flags
-    
+                                                    kCGImageAlphaNoneSkipLast |
+                                                    kCGBitmapByteOrderDefault);
+
     CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
     CGContextRelease(contextRef);
-    
-    return cvMat;
+
+
+    cv::Mat cvMatTest;
+    cv::transpose(cvMat, cvMatTest);
+
+    if  (image.imageOrientation == UIImageOrientationLeft
+         || image.imageOrientation == UIImageOrientationRight) {
+
+    }
+    else{
+        return cvMat;
+
+    }
+    cvMat.release();
+
+    cv::flip(cvMatTest, cvMatTest, 1);
+
+
+    return cvMatTest;
 }
 
 - (Mat)cvMatGrayFromUIImage:(UIImage *)image
@@ -101,19 +151,143 @@ Mat mask, bgModel,fgModel;
 }
 
 
--(UIImage *)UIImageFromCVMat:(Mat)cvMat
+//-(UIImage *)UIImageFromCVMat:(Mat)cvMat
+//{
+//    NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
+//    CGColorSpaceRef colorSpace;
+//    CGBitmapInfo info = kCGImageAlphaNone | kCGBitmapByteOrderDefault;
+//    if (cvMat.elemSize() == 1) {
+//        colorSpace = CGColorSpaceCreateDeviceGray();
+//    } else if (cvMat.elemSize() == 3) {
+//        colorSpace = CGColorSpaceCreateDeviceRGB();
+//    } else if (cvMat.elemSize() == 4) {
+//        colorSpace = CGColorSpaceCreateDeviceRGB();
+//        info = kCGImageAlphaLast | kCGBitmapByteOrderDefault;
+//    }
+//
+//    CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+//
+//    // Creating CGImage from Mat
+//    CGImageRef imageRef = CGImageCreate(cvMat.cols,                //width
+//                                        cvMat.rows,                //height
+//                                        8,                         //bits per component
+//                                        8 * cvMat.elemSize(),      //bits per pixel
+//                                        cvMat.step[0],             //bytesPerRow
+//                                        colorSpace,                //colorspace
+//                                        info,                      //bitmap info
+//                                        provider,                  //CGDataProviderRef
+//                                        NULL,                      //decode
+//                                        false,                     //should interpolate
+//                                        kCGRenderingIntentDefault  //intent
+//                                        );
+//
+//
+//    // Getting UIImage from CGImage
+//    UIImage *finalImage = [UIImage imageWithCGImage:imageRef];
+//    CGImageRelease(imageRef);
+//    CGDataProviderRelease(provider);
+//    CGColorSpaceRelease(colorSpace);
+//
+//    return finalImage;
+//}
+
+- (UIImage *)UIImageFromCVMat:(cv::Mat)cvMat
+{
+    NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
+    CGColorSpaceRef colorSpace;
+
+    if (cvMat.elemSize() == 1) {
+        colorSpace = CGColorSpaceCreateDeviceGray();
+    } else {
+        colorSpace = CGColorSpaceCreateDeviceRGB();
+    }
+
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+
+    // Creating CGImage from cv::Mat
+    CGImageRef imageRef = CGImageCreate(cvMat.cols,                                 //width
+                                        cvMat.rows,                                 //height
+                                        8,                                          //bits per component
+                                        8 * cvMat.elemSize(),                       //bits per pixel
+                                        cvMat.step[0],                            //bytesPerRow
+                                        colorSpace,                                 //colorspace
+                                        kCGImageAlphaNoneSkipLast|kCGBitmapByteOrderDefault,// bitmap info
+                                        provider,                                   //CGDataProviderRef
+                                        NULL,                                       //decode
+                                        false,                                      //should interpolate
+                                        kCGRenderingIntentDefault                   //intent
+                                        );
+
+
+    // Getting UIImage from CGImage
+    UIImage *finalImage = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    CGDataProviderRelease(provider);
+    CGColorSpaceRelease(colorSpace);
+    return finalImage;
+}
+
+- (cv::Mat)cvMatFromUIImage:(UIImage *)image
+{
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
+    CGFloat cols,rows;
+    if  (image.imageOrientation == UIImageOrientationLeft
+         || image.imageOrientation == UIImageOrientationRight) {
+        cols = image.size.height;
+        rows = image.size.width;
+    }
+    else{
+        cols = image.size.width;
+        rows = image.size.height;
+
+    }
+
+
+    cv::Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels
+
+    CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,                 // Pointer to backing data
+                                                    cols,                       // Width of bitmap
+                                                    rows,                       // Height of bitmap
+                                                    8,                          // Bits per component
+                                                    cvMat.step[0],              // Bytes per row
+                                                    colorSpace,                 // Colorspace
+                                                    kCGImageAlphaNoneSkipLast |
+                                                    kCGBitmapByteOrderDefault);
+
+    CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
+    CGContextRelease(contextRef);
+
+
+    cv::Mat cvMatTest;
+    cv::transpose(cvMat, cvMatTest);
+
+    if  (image.imageOrientation == UIImageOrientationLeft
+         || image.imageOrientation == UIImageOrientationRight) {
+
+    }
+    else{
+        return cvMat;
+
+    }
+    cvMat.release();
+
+    cv::flip(cvMatTest, cvMatTest, 1);
+
+
+    return cvMatTest;
+}
+
+-(UIImage *)UIImageWithTransparencyFromCVMat:(cv::Mat) cvMat
 {
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
     CGColorSpaceRef colorSpace;
     CGBitmapInfo info = kCGImageAlphaNone | kCGBitmapByteOrderDefault;
-    if (cvMat.elemSize() == 1) {
-        colorSpace = CGColorSpaceCreateDeviceGray();
-    } else if (cvMat.elemSize() == 3) {
-        colorSpace = CGColorSpaceCreateDeviceRGB();
-    } else if (cvMat.elemSize() == 4) {
-        colorSpace = CGColorSpaceCreateDeviceRGB();
-        info = kCGImageAlphaLast | kCGBitmapByteOrderDefault;
+    if (cvMat.elemSize() != 4) {
+        throw nil;
     }
+    
+    colorSpace = CGColorSpaceCreateDeviceRGB();
+    info = (kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
     
     CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
     
@@ -259,9 +433,23 @@ Mat mask, bgModel,fgModel;
     }
 }
 
--(UIImage*) grabCut:(UIImage*)sourceImage Rectangle:(CGRect)rect Mask:(UIImage*)maskImage iterationCount:(int)iterCount{
+-(UIImage*) resizeImage:(UIImage*)image size:(CGSize)size{
+    UIGraphicsBeginImageContext(size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(context, 0.0, size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
     
-    cv::Mat img=[self cvMatFromUIImage:sourceImage];
+    CGContextDrawImage(context, CGRectMake(0.0, 0.0, size.width, size.height), [image CGImage]);
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return scaledImage;
+}
+
+-(UIImage*) grabCut:(UIImage*)sourceImage Resized:(UIImage*)resizedImage Rectangle:(CGRect)rect Mask:(UIImage*)maskImage iterationCount:(int)iterCount{
+    
+    cv::Mat img=[self cvMatFromUIImage:resizedImage];
+    NSLog(@"img: %d %d", img.cols, img.rows);
     cv::cvtColor(img , img , COLOR_RGBA2RGB);
     
     
@@ -284,14 +472,90 @@ Mat mask, bgModel,fgModel;
     
     [self cropContours:&tempMask];
     
+    cv::Mat srcImg=[self cvMatFromUIImage:sourceImage];
+    NSLog(@"srcImg: %d %d", srcImg.cols, srcImg.rows);
+    
     // Generate output image
-    cv::Mat foreground(img.size(),CV_8UC3,
-                       cv::Scalar(255,255,255));
+    cv::Mat foreground(srcImg.size() ,CV_8UC4,
+                       cv::Scalar(255,255,255,255));
     
     tempMask=tempMask&1;
-    img.copyTo(foreground, tempMask);
     
-    UIImage* image = [self UIImageFromCVMat:(foreground)];
+    NSLog(@"tempMask before: %d %d", tempMask.cols, tempMask.rows);
+    cv::resize(tempMask, tempMask, srcImg.size());
+    NSLog(@"tempMask after: %d %d", tempMask.cols, tempMask.rows);
+    //[self resizeImage:tempMask size:sourceImage.size()]
+    srcImg.copyTo(foreground, tempMask);
+    
+//    cv::cvtColor(foreground, foreground, COLOR_RGB2BGRA);
+    
+    uint8_t* data = (uint8_t*)foreground.data;
+    
+    long _r = 0, _g = 0, _b = 0, _a = 0;
+    
+    for(int x = 0; x < foreground.cols; x++){
+        for( int y = 0; y < foreground.rows; y++){
+            NSUInteger index = ((foreground.cols  * y) + x ) * 4;
+//
+            uint8_t B = data[index + 0];
+            uint8_t G = data[index + 1];
+            uint8_t R = data[index + 2];
+            uint8_t A = data[index + 3];
+//
+            if (B == 255) {
+                _b++;
+            }
+            
+            if (G == 255) {
+                _g++;
+            }
+            
+            if (R == 255) {
+                _r++;
+            }
+            
+            if (A == 255) {
+                _a++;
+            }
+            if (R == 255 && G == 255 && B == 255) {
+                data[index + 3] = 0;
+            }
+        }
+    }
+    
+    NSLog(@"%ld %ld %ld %ld %d %d", _b, _g, _r, _a, foreground.cols, foreground.rows);
+    _r = 0; _g = 0; _b = 0; _a = 0;
+    
+        for(int x = 0; x < foreground.cols; x++){
+            for( int y = 0; y < foreground.rows; y++){
+                NSUInteger index = ((foreground.cols  * y) + x ) * 4;
+    //
+                uint8_t B = data[index + 0];
+                uint8_t G = data[index + 1];
+                uint8_t R = data[index + 2];
+                uint8_t A = data[index + 3];
+    //
+                if (B == 255) {
+                    _b++;
+                }
+                
+                if (G == 255) {
+                    _g++;
+                }
+                
+                if (R == 255) {
+                    _r++;
+                }
+                
+                if (A == 255) {
+                    _a++;
+    //                data[index + 3] = 0;
+                }
+            }
+        }
+        NSLog(@"%ld %ld %ld %ld %d %d", _b, _g, _r, _a, foreground.cols, foreground.rows);
+//
+    UIImage* image = [self UIImageWithTransparencyFromCVMat:(foreground)];
     UIImage* pngImage = [UIImage imageWithData:UIImagePNGRepresentation(image)];
 //    UIImageWriteToSavedPhotosAlbum(pngImage, nil, nil, nil);  // save to photo album
     return pngImage;

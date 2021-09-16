@@ -250,7 +250,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 //        UIImage* resultImage= [weakSelf.grabCutManager grabCut:weakSelf.resizedImage foregroundBound:weakSelf.grabRect iterationCount:5];
         
 //        -(UIImage*) grabCut:(UIImage*)img Rectangle:(CGRect)rect Mask:(UIImage*)mask iterationCount:(int)iterCount;
-        UIImage* resultImage = [weakSelf.grabCutManager grabCut:weakSelf.resizedImage Rectangle:weakSelf.grabRect Mask:nil iterationCount:11];
+        UIImage* resultImage = [weakSelf.grabCutManager grabCut:weakSelf.originalImage Resized:weakSelf.resizedImage Rectangle:weakSelf.grabRect Mask:nil iterationCount:11];
         resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
         
 //        NSData *data = [NSData dataWithBytes:result length:weakSelf.resizedImage.size.width * weakSelf.resizedImage.size.height * 4];
@@ -258,7 +258,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 //        UIImage* resultImage = [[UIImage alloc]initWithData:data];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [weakSelf.resultImageView setImage:resultImage];
-            [weakSelf.imageView setAlpha:0];
+            [weakSelf.imageView setHidden:true];
             [weakSelf hideLoadingIndicatorView];
         });
     });
@@ -285,7 +285,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 //         ];
         auto masked = [weakSelf resizeImage:image size:weakSelf.resizedImage.size];
         
-        UIImage* resultImage = [weakSelf.grabCutManager grabCut:weakSelf.resizedImage Rectangle:weakSelf.grabRect Mask:masked iterationCount:11];
+        UIImage* resultImage = [weakSelf.grabCutManager grabCut:weakSelf.originalImage Resized:weakSelf.resizedImage Rectangle:weakSelf.grabRect Mask:masked iterationCount:11];
         resultImage = [weakSelf masking:weakSelf.originalImage mask:[weakSelf resizeImage:resultImage size:weakSelf.originalImage.size]];
 //        resultImage = [weakSelf.grabCutManager smoothWhiteBounds:resultImage];
 //        UIImageWriteToSavedPhotosAlbum(resultImage, nil, nil, nil);
@@ -293,7 +293,7 @@ const static int MAX_IMAGE_LENGTH = 450;
 //        UIImage* resultImage = [[UIImage alloc]initWithData:data];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [weakSelf.resultImageView setImage:resultImage];
-            [weakSelf.imageView setAlpha:0];
+            [weakSelf.imageView setHidden:true];
             [weakSelf hideLoadingIndicatorView];
         });
     });
